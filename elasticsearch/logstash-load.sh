@@ -60,25 +60,12 @@ check_interval() {
         sleep 5
         echo "[5s timeout - still processing...]"
         file_processed $FILE_NAME && log_progress $TARGET_FILE_SIZE_B $FILE_NAME
-        #test -f $SINCE_DB_PATH && [ -s $SINCE_DB_PATH ] && check_current_file_status $READ_BYTES $TARGET_FILE_SIZE_B
         file_processed $FILE_NAME && check_current_file_status $READ_BYTES $TARGET_FILE_SIZE_B
     done
 }
 
 reindex_and_measure() {
-    curl -X POST "localhost:9200/_reindex?pretty" -H 'Content-Type: application/json' -d'
-        {
-            "source": {
-                "index": "plwiki-20200301"
-            },
-            "dest": {
-                "index": "plwiki-20200301-current"
-            }
-        }
-    '
-
-    curl -XGET "localhost:9200/plwiki-20200301-current/_stats" > "${STATS_DIR}/$1M.json"
-    curl -XDELETE "localhost:9200/plwiki-20200301-current"
+    curl -XGET "localhost:9200/plwiki-20200301/_stats" > "${STATS_DIR}/$1M.json"
 }
 
 change_conf_source_file() {
