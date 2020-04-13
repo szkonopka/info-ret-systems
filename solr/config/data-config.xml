@@ -5,8 +5,9 @@
 		processor="XPathEntityProcessor"
 		stream="true"
 		forEach="/mediawiki/page/"
-		url="E:\solr-8.4.1\server\solr\wiki\input\plwiki-20200301-pages-articles-multistream.xml"
+		url="E:\solr-8.4.1\server\solr\wiki\input\plwiki-20200301-pages-articles-multistream1.xml-p1p169750"
 		transformer="RegexTransformer,DateFormatTransformer"
+		newerThan="${dataimporter.last_index_time}"
 		>
 	    <field column="id"		xpath="/mediawiki/page/id" />
 	    <field column="title"	xpath="/mediawiki/page/title" />
