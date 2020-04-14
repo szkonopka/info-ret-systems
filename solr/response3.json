@@ -1,0 +1,18 @@
+{
+  "responseHeader":{
+    "status":0,
+    "QTime":0},
+  "initArgs":[
+    "defaults",[
+      "config","data-config.xml"]],
+  "status":"idle",
+  "importResponse":"",
+  "statusMessages":{
+    "Total Requests made to DataSource":"0",
+    "Total Rows Fetched":"253305",
+    "Total Documents Processed":"253305",
+    "Total Documents Skipped":"0",
+    "Full Dump Started":"2020-04-11 18:58:30",
+    "":"Indexing completed. Added/Updated: 253305 documents. Deleted 0 documents.",
+    "Committed":"2020-04-11 19:00:55",
+    "Time taken":"0:2:24.306"}}

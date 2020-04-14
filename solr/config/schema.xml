@@ -123,13 +123,13 @@
     <!-- <field name="_text_" type="text_general" indexed="true" stored="false" multiValued="true"/> -->
 
 
-    <field name="_version_" type="plong" indexed="true" stored="true"/>
+    <field name="_version_" type="plong" indexed="true" stored="false"/>
     <field name="id" type="string" indexed="true" stored="true" required="true"/>
     <field name="title" type="string" indexed="true" stored="true"/>
     <field name="revision" type="pint" indexed="true" stored="false"/>
     <field name="user" type="string" indexed="true" stored="false"/>
     <field name="userId" type="pint" indexed="true" stored="false"/>
-    <field name="text" type="text_en" indexed="true" stored="false"/>
+    <field name="text" type="text_en" indexed="true" stored="true"/>
     <uniqueKey>id</uniqueKey>
 
     <!-- This can be enabled, in case the client does not know what fields may be searched. It isn't enabled by default
