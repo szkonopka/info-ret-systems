@@ -66,21 +66,28 @@ check_interval() {
     done
 }
 
-reindex_and_measure() {
-    curl -XPOST "localhost:9200/plwiki-20200301/_freeze"
-
+refresh_index() {
     echo "Refreshing index..."
     curl -XPOST "localhost:9200/plwiki-20200301/_refresh"
-    sleep 3
+    sleep 1
+}
 
+force_merge_index() {
     echo "Limiting segments amount to 1..."
     curl -XPOST "localhost:9200/plwiki-20200301/_forcemerge?max_num_segments=1"
-    sleep 3
+    sleep 1
+}
 
+reindex_and_measure() {
+    refresh_index
+    force_merge_index
+    refresh_index
+    force_merge_index
+    refresh_index
+    force_merge_index
+    
     echo "Fetching statistics after merge of $1 MB data..."
     curl -XGET "localhost:9200/plwiki-20200301/_stats" > "${STATS_DIR}/$1M.json"
-
-    curl -XPOST "localhost:9200/plwiki-20200301/_unfreeze"
 }
 
 change_conf_source_file() {
