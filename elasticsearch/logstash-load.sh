@@ -1,12 +1,14 @@
 #!/bin/bash
 
-curl -XDELETE "localhost:9200/plwiki-20200301"
-
 EXCH_STRING="FILE_TO_LOAD_VAR"
 DATA_DIR="./data"
 STATS_DIR="./stats"
 SINCE_DB_PATH="/home/samzon/current-position"
 CHECK_ONGOING=1
+
+./logstash-config-reset.sh
+curl -XDELETE "localhost:9200/plwiki-20200301"
+rm -rf $SINCE_DB_PATH
 
 declare -a plwikifiles=(
     "plwiki-20200301-articles-1.xml"
@@ -65,7 +67,20 @@ check_interval() {
 }
 
 reindex_and_measure() {
+    curl -XPOST "localhost:9200/plwiki-20200301/_freeze"
+
+    echo "Refreshing index..."
+    curl -XPOST "localhost:9200/plwiki-20200301/_refresh"
+    sleep 3
+
+    echo "Limiting segments amount to 1..."
+    curl -XPOST "localhost:9200/plwiki-20200301/_forcemerge?max_num_segments=1"
+    sleep 3
+
+    echo "Fetching statistics after merge of $1 MB data..."
     curl -XGET "localhost:9200/plwiki-20200301/_stats" > "${STATS_DIR}/$1M.json"
+
+    curl -XPOST "localhost:9200/plwiki-20200301/_unfreeze"
 }
 
 change_conf_source_file() {
@@ -99,7 +114,6 @@ SIZE_ACC=0
 
 FILE_PATH="${ABS_DATA_DIR}/plwiki-20200301-articles-1.xml"
 change_conf_source_file $EXCH_STRING $FILE_PATH
-rm -rf $SINCE_DB_PATH
 
 /usr/share/logstash/bin/logstash -f ./xml-plwiki.conf --config.reload.automatic & iterate_files
 
